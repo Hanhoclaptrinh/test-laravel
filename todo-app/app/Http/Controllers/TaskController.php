@@ -26,6 +26,28 @@ class TaskController extends Controller
         return redirect('/');
     }
 
+    // cap nhat trang thai cong viec sau khi hoan thanh
+    public function updateStatus($id, Request $request)
+    {
+        try {
+            $task = Task::findOrFail($id);
+            $task->update([
+                'completed' => $request->input('completed', 0) == 1
+            ]);
+
+            $updatedTask = Task::find($id);
+            if ($updatedTask->completed !== $task) {
+                throw new \Exception('Không thể lưu vào database');
+            }
+
+            return redirect()->back()
+                ->with('success', 'Cập nhật trạng thái thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Cập nhật trạng thái thất bại: ' . $e->getMessage());
+        }
+    }
+
     // xoa cong viec
     public function destroy($id) {
         $task = Task::findOrFail($id);

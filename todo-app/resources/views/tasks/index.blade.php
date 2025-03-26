@@ -57,6 +57,14 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                     </form>
+                    <form action="{{ route('tasks.updateStatus', $task->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="completed" value="1" {{ $task->completed ? 'checked' : '' }} onchange="console.log('ok')">
+                            <label class="form-check-label" for="completed">Đã hoàn thành</label>
+                        </div>
+                    </form>
                 </li>
             @empty
                 <li class="text-muted text-center">Chưa có công việc nào!</li>
