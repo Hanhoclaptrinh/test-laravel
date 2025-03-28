@@ -14,8 +14,10 @@
         <li><strong>Lớp:</strong> {{ $student->class }}</li>
         <li><strong>Khoa:</strong> {{ $student->faculty }}</li>
         <li><strong>GPA:</strong> {{ $student->gpa }}</li>
+        <li><strong>Mật khẩu đăng nhập:</strong> {{ $password }}</li>
         <li><strong>Thời gian tạo:</strong> {{ $student->created_at }}</li>
         <li><strong>Thời gian chỉnh sửa:</strong> {{ $student->updated_at }}</li>
+        <p>Vui lòng đăng nhập và thay đổi mật khẩu!</p>
     </ul>
     <p>Trân trọng,<br>Hệ thống quản lý sinh viên</p>
 </body>
