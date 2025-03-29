@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Mail\StudentInfoMail;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller
@@ -35,7 +36,11 @@ class StudentController extends Controller
             'gpa' => 'required|numeric|between:0,4' // gpa (0 - 4)
         ]);
 
-        Student::create($request->all());
+        $randomPassword = Str::random(8);
+        $data = $request->all();
+        $data['password'] = $randomPassword;
+        $student = Student::create($data);
+        Mail::to($student->email)->send(new StudentInfoMail($student, $randomPassword));
         return redirect()->route('students.index')->with('success', 'Thêm sinh viên thành công.');
     }
 
@@ -72,6 +77,8 @@ class StudentController extends Controller
     public function sendEmail(Student $student)
     {
         $randomPassword = Str::random(8);
+        $hashedPassword = Hash::make($randomPassword); // ma hoa mat khau de luu vao db
+        $student->update(['password' => $hashedPassword]); // cap nhat lai mat khau moi
         Mail::to($student->email)->send(new StudentInfoMail($student, $randomPassword));
         return redirect()->route('students.index')->with('success', 'Email đã được gửi tới ' . $student->name . ' (' . $student->email . ')');
     }
